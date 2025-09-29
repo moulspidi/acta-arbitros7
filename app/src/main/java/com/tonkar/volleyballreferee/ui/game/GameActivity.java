@@ -1,5 +1,4 @@
 package com.tonkar.volleyballreferee.ui.game;
-
 import android.content.Intent;
 import com.tonkar.volleyballreferee.ui.scoresheet.ScoreSheetActivity;
 import android.widget.Toast;
@@ -9,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.os.*;
 import android.util.Log;
 import android.view.*;
-import android.os.Bundle;
 import android.widget.*;
 
 import androidx.activity.OnBackPressedCallback;
@@ -711,47 +709,13 @@ public class GameActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume(){ super.onResume(); try { NavController nav = NavHostFragment.findNavController(getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)); SavedStateHandle handle = nav.getCurrentBackStackEntry().getSavedStateHandle(); if (handle != null && handle.contains("roster_override")) { android.os.Bundle bundle = handle.get("roster_override"); applyRosterOverride(bundle); handle.remove("roster_override"); } } catch (Throwable ignore) {} if (preSignCoaches && !askedPreSignOnce) {
+    protected void onResume() {
+        super.onResume();
+        if (preSignCoaches && !askedPreSignOnce) {
             askedPreSignOnce = true;
             Intent sheet = new Intent(this, ScoreSheetActivity.class);
             sheet.putExtra("pre_sign_coaches", true);
             startActivity(sheet);
         }
     }
-    private void applyRosterOverride(android.os.Bundle bundle) {
-        if (bundle == null) return;
-        try {
-            String teamTypeStr = bundle.getString("teamType", null);
-            String playersJson = bundle.getString("playersJson", "[]");
-            if (teamTypeStr == null) return;
-            TeamType ttype = TeamType.valueOf(teamTypeStr);
-            java.util.Set<com.tonkar.volleyballreferee.engine.api.model.PlayerDto> current = mTeamService.getPlayers(ttype);
-            java.util.ArrayList<Integer> curNums = new java.util.ArrayList<>();
-            for (com.tonkar.volleyballreferee.engine.api.model.PlayerDto p : current) curNums.add(p.getNum());
-            // parse target
-            com.google.gson.reflect.TypeToken<java.util.ArrayList<java.util.Map<String,Object>>> _tt = new com.google.gson.reflect.TypeToken<java.util.ArrayList<java.util.Map<String,Object>>>(){};
-            java.util.ArrayList<java.util.Map<String,Object>> target = com.tonkar.volleyballreferee.engine.api.JsonConverters.GSON.fromJson(playersJson, _tt.getType());
-            java.util.HashSet<Integer> desired = new java.util.HashSet<>();
-            if (target != null) {
-                for (java.util.Map<String,Object> mp : target) {
-                    int num = ((Double) mp.get("num")).intValue();
-                    String name = (String) mp.get("name");
-                    desired.add(num);
-                    if (!curNums.contains(num)) {
-                        mTeamService.addPlayer(ttype, num);
-                    }
-                    if (name != null) mTeamService.setPlayerName(ttype, num, name);
-                }
-            }
-            // remove players not desired
-            for (Integer n : curNums) {
-                if (!desired.contains(n)) {
-                    mTeamService.removePlayer(ttype, n);
-                }
-            }
-        } catch (Throwable t) {
-            android.util.Log.w(com.tonkar.volleyballreferee.engine.Tags.GAME_UI, "applyRosterOverride failed", t);
-        }
-    }
-
 }

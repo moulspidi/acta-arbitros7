@@ -553,35 +553,4 @@ public class TeamSetupFragment extends Fragment implements BaseTeamServiceHandle
             ((StoredTeamActivity) requireActivity()).computeSaveLayoutVisibility();
         }
     }
-    private void pushRosterOverrideToCaller() {
-        try {
-            if (!isForceEdit()) return;
-            com.google.gson.Gson _g = com.tonkar.volleyballreferee.engine.api.JsonConverters.GSON;
-            java.util.ArrayList<java.util.Map<String,Object>> players = new java.util.ArrayList<>();
-            for (com.tonkar.volleyballreferee.engine.api.model.PlayerDto p : mTeamService.getPlayers(mTeamType)) {
-                java.util.HashMap<String,Object> mp = new java.util.HashMap<>();
-                mp.put("num", p.getNum());
-                mp.put("name", mTeamService.getPlayerName(mTeamType, p.getNum()));
-                players.add(mp);
-            }
-            android.os.Bundle bundle = new android.os.Bundle();
-            bundle.putString("teamType", String.valueOf(mTeamType));
-            bundle.putString("playersJson", _g.toJson(players));
-            androidx.navigation.NavController nav = androidx.navigation.fragment.NavHostFragment.findNavController(this);
-            androidx.lifecycle.SavedStateHandle handle = nav.getPreviousBackStackEntry().getSavedStateHandle();
-            handle.set("roster_override", bundle);
-        } catch (Throwable t) {
-            android.util.Log.w(com.tonkar.volleyballreferee.engine.Tags.SETUP_UI, "pushRosterOverrideToCaller failed", t);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        pushRosterOverrideToCaller();
-        if (mIndoorTeam != null) {
-            mIndoorTeam.removeTeamListener(this);
-        }
-    }
-
 }
