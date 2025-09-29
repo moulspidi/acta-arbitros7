@@ -220,17 +220,6 @@ public class TeamSetupFragment extends Fragment implements BaseTeamServiceHandle
 
         computeConfirmItemVisibility();
 
-        // Force-enable inputs when editing from an ongoing match
-        if (isForceEdit()) {
-            try { if (teamNameInput != null) teamNameInput.setEnabled(true); } catch (Throwable ignore) {}
-            try { if (mPlayerNamesButton != null) mPlayerNamesButton.setEnabled(true); } catch (Throwable ignore) {}
-            try { if (mTeamColorButton != null) mTeamColorButton.setEnabled(true); } catch (Throwable ignore) {}
-            try { if (mGenderButton != null) mGenderButton.setEnabled(true); } catch (Throwable ignore) {}
-            try { if (mHomeTeamCaptainButton != null) mHomeTeamCaptainButton.setEnabled(true); } catch (Throwable ignore) {}
-            try { if (mGuestTeamCaptainButton != null) mGuestTeamCaptainButton.setEnabled(true); } catch (Throwable ignore) {}
-            try { if (liberoNumbersGrid != null) liberoNumbersGrid.setEnabled(true); } catch (Throwable ignore) {}
-            try { if (teamNumbersGrid != null) teamNumbersGrid.setEnabled(true); } catch (Throwable ignore) {}
-        }
         return fragmentView;
     }
 
