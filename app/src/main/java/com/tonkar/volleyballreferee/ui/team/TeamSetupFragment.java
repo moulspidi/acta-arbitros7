@@ -220,6 +220,7 @@ public class TeamSetupFragment extends Fragment implements BaseTeamServiceHandle
 
         computeConfirmItemVisibility();
 
+        if (isForceEdit()) { try { enableAllChildrenRecursively(fragmentView); } catch (Throwable ignore) {} }
         return fragmentView;
     }
 
@@ -553,4 +554,16 @@ public class TeamSetupFragment extends Fragment implements BaseTeamServiceHandle
             ((StoredTeamActivity) requireActivity()).computeSaveLayoutVisibility();
         }
     }
+    private void enableAllChildrenRecursively(android.view.View v) {
+        try {
+            v.setEnabled(true);
+            if (v instanceof android.view.ViewGroup) {
+                android.view.ViewGroup vg = (android.view.ViewGroup) v;
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    enableAllChildrenRecursively(vg.getChildAt(i));
+                }
+            }
+        } catch (Throwable ignore) {}
+    }
+
 }
