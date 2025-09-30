@@ -1094,7 +1094,7 @@ public abstract class Game extends BaseGame {
         boolean teamHasReachedPenalty = false;
 
         for (SanctionDto sanction : getAllSanctions(teamType)) {
-            if (sanction.getCard().isDelaySanctionType()) {
+            if (sanction.getCard().isDelaySanctionType() && !sanction.isImproperRequest()) {
                 teamHasReachedPenalty = true;
                 break;
             }
@@ -1371,17 +1371,12 @@ public abstract class Game extends BaseGame {
 
     @Override
     public void addImproperRequest(TeamType teamType) {
-        // Create a Delay Warning marked as IR, but do NOT advance delay progression
-        int setIdx = currentSetIndex();
-        int hp = getPoints(TeamType.HOME);
-        int gp = getPoints(TeamType.GUEST);
-        com.tonkar.volleyballreferee.engine.game.sanction.SanctionType card =
-                com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_WARNING;
-        SanctionDto s = new SanctionDto(card, SanctionDto.TEAM, setIdx, hp, gp, true);
-        if (teamType == TeamType.HOME) {
-            mHomeSanctions.add(s);
-        } else {
-            mGuestSanctions.add(s);
-        }
+        // Registrar como Delay Warning y marcar la última como IR
+        giveSanction(teamType,
+                com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_WARNING,
+                com.tonkar.volleyballreferee.engine.api.model.SanctionDto.TEAM);
+        try {
+            markLastSanctionAsImproperRequest(teamType);
+        } catch (Throwable ignored) {}
     }
 }

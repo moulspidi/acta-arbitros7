@@ -561,6 +561,7 @@ public class ScoreSheetBuilder {
 
         sanctionDiv.appendChild(new Element("div").addClass(getSanctionImageClass(sanction.getCard())));
         sanctionDiv.appendChild(createPlayerSpan(teamType, player, mStoredGame.isLibero(teamType, player)));
+        try { if (sanction.getCard().isDelaySanctionType() && sanction.isImproperRequest()) { score += " (IR)"; } } catch (Throwable ignored) {}
         sanctionDiv.appendChild(createCellSpan(score, false, false));
 
         return sanctionDiv;
@@ -1200,7 +1201,7 @@ public class ScoreSheetBuilder {
     Element card = new Element("div");
     card.addClass("div-card").addClass("spacing-before");
     card.appendChild(createLicencesDiv());
-        container.appendChild(createTechnicalStaffDiv());
+    card.appendChild(createTechnicalStaffDiv());
     return card;
     }
     private String getIrLabel(com.tonkar.volleyballreferee.engine.api.model.SanctionDto s) {
@@ -1327,7 +1328,7 @@ public class ScoreSheetBuilder {
         ac.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
           .text(mContext.getString(R.string.assistant_coach));
         ac.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
-          .text(mAssistantCoachName != null ? mAssistantCoachName : "");
+          .text("");
         row.appendChild(ac);
 
         org.jsoup.nodes.Element st = new org.jsoup.nodes.Element("div");
@@ -1335,7 +1336,7 @@ public class ScoreSheetBuilder {
         st.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
           .text(mContext.getString(R.string.staff));
         st.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
-          .text(mStaffName != null ? mStaffName : "");
+          .text("");
         row.appendChild(st);
 
         block.appendChild(row);

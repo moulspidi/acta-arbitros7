@@ -22,6 +22,5 @@ public interface IGame extends IGeneral, IScore, ITeam, ITimeout, ISanction {
 
 
     void markLastSanctionAsImproperRequest(TeamType teamType);
-
     void addImproperRequest(TeamType teamType);
 }
