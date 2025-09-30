@@ -549,8 +549,9 @@ public class ScoreSheetBuilder {
         return sanctionsDiv;
     }
 
-    private Element createSanctionDiv(TeamType teamType, SanctionDto sanction) {        score = null;
-        delayLabel = null;
+    private Element createSanctionDiv(TeamType teamType, SanctionDto sanction) {
+        String score = null;
+        String delayLabel = null;
 Element sanctionDiv = new Element("div");
         sanctionDiv.addClass("div-grid-sanction");
 
