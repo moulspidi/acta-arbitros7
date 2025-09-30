@@ -1128,34 +1128,73 @@ public class ScoreSheetBuilder {
         return String.format("#%06X", (0xFFFFFF & color)).toLowerCase();
     }
     private Element createLicencesDiv() {
-        Element row = new Element("div");
-        row.attr("style", "display:flex;gap:8px;background:#eee;padding:8px;border:1px solid #ccc;border-radius:6px;margin-top:8px;");
-
-        Element b1 = new Element("div");
-        b1.attr("style", "flex:1;background:#eee;border:1px dashed #bbb;border-radius:6px;min-height:72px;padding:8px;");
-        b1.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+        Element grid = new Element("div");
+        // Reutiliza tu grid 1-2-3 + espaciado existentes en el proyecto
+        grid.addClass("div-grid-1-2-3").addClass("spacing-before");
+    
+        // Caja con estilos inline para que se vea igual también en PDF
+        String boxStyle =
+                "border:1px solid #444;border-radius:6px;padding:6px 8px;"
+              + "min-height:52px;display:flex;flex-direction:column;justify-content:center;background:#fff;";
+    
+        // ---- Licence referee 1
+        Element b1 = new Element("div").attr("style", boxStyle);
+        b1.appendElement("div")
+          .attr("style","font-size:11px;font-weight:600;opacity:.75;margin-bottom:2px;")
           .text(mContext.getString(R.string.licence_referee_1));
-        b1.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
-          .text(mReferee1License != null ? mReferee1License : "");
-        row.appendChild(b1);
-
-        Element b2 = new Element("div");
-        b2.attr("style", "flex:1;background:#eee;border:1px dashed #bbb;border-radius:6px;min-height:72px;padding:8px;");
-        b2.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+        b1.appendElement("div")
+          .attr("style","font-size:13px;font-weight:700;letter-spacing:.2px;word-break:break-word;")
+          .text(safeText(mReferee1License));
+        grid.appendChild(b1);
+    
+        // ---- Licence referee 2
+        Element b2 = new Element("div").attr("style", boxStyle);
+        b2.appendElement("div")
+          .attr("style","font-size:11px;font-weight:600;opacity:.75;margin-bottom:2px;")
           .text(mContext.getString(R.string.licence_referee_2));
-        b2.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
-          .text(mReferee2License != null ? mReferee2License : "");
-        row.appendChild(b2);
-
-        Element b3 = new Element("div");
-        b3.attr("style", "flex:1;background:#eee;border:1px dashed #bbb;border-radius:6px;min-height:72px;padding:8px;");
-        b3.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+        b2.appendElement("div")
+          .attr("style","font-size:13px;font-weight:700;letter-spacing:.2px;word-break:break-word;")
+          .text(safeText(mReferee2License));
+        grid.appendChild(b2);
+    
+        // ---- Licence anotador
+        Element b3 = new Element("div").attr("style", boxStyle);
+        b3.appendElement("div")
+          .attr("style","font-size:11px;font-weight:600;opacity:.75;margin-bottom:2px;")
           .text(mContext.getString(R.string.licence_scorer));
-        b3.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
-          .text(mScorerLicense != null ? mScorerLicense : "");
-        row.appendChild(b3);
+        b3.appendElement("div")
+          .attr("style","font-size:13px;font-weight:700;letter-spacing:.2px;word-break:break-word;")
+          .text(safeText(mScorerLicense));
+        grid.appendChild(b3);
 
-        return row;
+        // ---- Extra row: Assistant Coach & Staff (Home/Guest)
+        grid.appendElement("div").addClass("spacing-before");
+        Element rowExtra = new Element("div");
+        rowExtra.attr("style", "display:flex;gap:8px;flex-wrap:wrap;align-items:stretch;");
+        // Reuse same box style
+        // Asistant Coach (Home)
+        Element c1 = new Element("div").attr("style", boxStyle);
+        c1.appendElement("div").attr("style","font-size:11px;font-weight:600;opacity:.75;margin-bottom:2px;").text("Asistant Coach (Home)");
+        c1.appendElement("div").attr("style","font-size:13px;font-weight:700;letter-spacing:.2px;word-break:break-word;").text(safeText(mHomeCoachLicence));
+        rowExtra.appendChild(c1);
+        // Asistant Coach (Guest)
+        Element c2 = new Element("div").attr("style", boxStyle);
+        c2.appendElement("div").attr("style","font-size:11px;font-weight:600;opacity:.75;margin-bottom:2px;").text("Asistant Coach (Guest)");
+        c2.appendElement("div").attr("style","font-size:13px;font-weight:700;letter-spacing:.2px;word-break:break-word;").text(safeText(mGuestCoachLicence));
+        rowExtra.appendChild(c2);
+        // Staff (Home)
+        Element c3 = new Element("div").attr("style", boxStyle);
+        c3.appendElement("div").attr("style","font-size:11px;font-weight:600;opacity:.75;margin-bottom:2px;").text("Staff (Home)");
+        c3.appendElement("div").attr("style","font-size:13px;font-weight:700;letter-spacing:.2px;word-break:break-word;").text(safeText(mHomeStaffLicence));
+        rowExtra.appendChild(c3);
+        // Staff (Guest)
+        Element c4 = new Element("div").attr("style", boxStyle);
+        c4.appendElement("div").attr("style","font-size:11px;font-weight:600;opacity:.75;margin-bottom:2px;").text("Staff (Guest)");
+        c4.appendElement("div").attr("style","font-size:13px;font-weight:700;letter-spacing:.2px;word-break:break-word;").text(safeText(mGuestStaffLicence));
+        rowExtra.appendChild(c4);
+        grid.appendChild(rowExtra);
+    
+        return grid;
     }
     private Element createLicencesCard() {
     Element card = new Element("div");
