@@ -642,8 +642,7 @@ Element sanctionDiv = new Element("div");
             score = delayLabel + " · " + score;
         }
         sanctionDiv.appendChild(createCellSpan(score, false, false));
-    
-}
+    }
 
     private String getSanctionImageClass(SanctionType sanctionType) {
         return switch (sanctionType) {
