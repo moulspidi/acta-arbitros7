@@ -550,20 +550,47 @@ public class ScoreSheetBuilder {
     }
 
     private Element createSanctionDiv(TeamType teamType, SanctionDto sanction) {
-        String score = null;
-        String delayLabel = null;
-Element sanctionDiv = new Element("div");
+        org.jsoup.nodes.Element sanctionDiv = new org.jsoup.nodes.Element("div");
         sanctionDiv.addClass("div-grid-sanction");
 
         int player = sanction.getNum();
 
-        score = String.format(Locale.getDefault(), "%d-%d",
-                                     TeamType.HOME.equals(teamType) ? sanction.getHomePoints() : sanction.getGuestPoints(),
-                                     TeamType.HOME.equals(teamType) ? sanction.getGuestPoints() : sanction.getHomePoints());
-
-        sanctionDiv.appendChild(new Element("div").addClass(getSanctionImageClass(sanction.getCard())));
+        // Icono / clase de la sanción y jugador implicado
+        sanctionDiv.appendChild(new org.jsoup.nodes.Element("div").addClass(getSanctionImageClass(sanction.getCard())));
         sanctionDiv.appendChild(createPlayerSpan(teamType, player, mStoredGame.isLibero(teamType, player)));
-        try { if (sanction.getCard().isDelaySanctionType() && sanction.isImproperRequest()) { score += " (IR)"; } } catch (Throwable ignored) {}
+
+        // Reconstrucción segura del marcador
+        String score = String.format(
+                java.util.Locale.getDefault(),
+                "%d-%d",
+                (com.tonkar.volleyballreferee.engine.team.TeamType.HOME.equals(teamType) ? sanction.getHomePoints() : sanction.getGuestPoints()),
+                (com.tonkar.volleyballreferee.engine.team.TeamType.HOME.equals(teamType) ? sanction.getGuestPoints() : sanction.getHomePoints())
+        );
+
+        // Badge textual para la familia de demora
+        String delayLabel = null;
+        try {
+            if (sanction.getCard().isDelaySanctionType()) {
+                if (sanction.isImproperRequest()) {
+                    delayLabel = "IR";
+                } else if (sanction.getCard() == com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_WARNING) {
+                    delayLabel = "Delay Warning";
+                } else if (sanction.getCard() == com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_PENALTY) {
+                    delayLabel = "Delay Penalty";
+                }
+            }
+        } catch (Throwable ignored) { }
+
+        if (delayLabel != null && (score == null || score.isEmpty())) {
+            score = delayLabel;
+        } else if (delayLabel != null) {
+            score = delayLabel + " · " + score;
+        }
+
+        sanctionDiv.appendChild(createCellSpan(score, false, false));
+        return sanctionDiv;
+}
+} catch (Throwable ignored) {}
         
         // Build delay label for clarity
         try {
