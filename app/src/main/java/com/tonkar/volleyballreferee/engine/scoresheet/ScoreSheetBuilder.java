@@ -1200,6 +1200,7 @@ public class ScoreSheetBuilder {
     Element card = new Element("div");
     card.addClass("div-card").addClass("spacing-before");
     card.appendChild(createLicencesDiv());
+        container.appendChild(createTechnicalStaffDiv());
     return card;
     }
     private String getIrLabel(com.tonkar.volleyballreferee.engine.api.model.SanctionDto s) {
@@ -1313,4 +1314,31 @@ public class ScoreSheetBuilder {
             + "</html>\n";
     }
 
+
+    private org.jsoup.nodes.Element createTechnicalStaffDiv() {
+        org.jsoup.nodes.Element block = new org.jsoup.nodes.Element("div");
+        block.attr("style", "margin-top:8px;padding:8px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;");
+        block.appendElement("div").attr("style","font-weight:700;margin-bottom:6px;").text(mContext.getString(R.string.technical_staff));
+        org.jsoup.nodes.Element row = new org.jsoup.nodes.Element("div");
+        row.attr("style", "display:flex;gap:8px;");
+
+        org.jsoup.nodes.Element ac = new org.jsoup.nodes.Element("div");
+        ac.attr("style","flex:1;border:1px dashed #bbb;border-radius:6px;background:#fff;padding:8px;");
+        ac.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+          .text(mContext.getString(R.string.assistant_coach));
+        ac.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
+          .text(mAssistantCoachName != null ? mAssistantCoachName : "");
+        row.appendChild(ac);
+
+        org.jsoup.nodes.Element st = new org.jsoup.nodes.Element("div");
+        st.attr("style","flex:1;border:1px dashed #bbb;border-radius:6px;background:#fff;padding:8px;");
+        st.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+          .text(mContext.getString(R.string.staff));
+        st.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
+          .text(mStaffName != null ? mStaffName : "");
+        row.appendChild(st);
+
+        block.appendChild(row);
+        return block;
+    }
 }
