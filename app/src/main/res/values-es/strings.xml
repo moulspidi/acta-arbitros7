@@ -349,4 +349,5 @@
     <string name="staff_guest">Staff (Guest)</string>
     <string name="improper_request_ir">Solicitud improcedente (IR)</string>
     <string name="improper_request_recorded">Solicitud improcedente registrada: %1$s</string>
+    <string name="improper_request">Solicitud improcedente</string>
 </resources>

@@ -479,4 +479,5 @@
     <string name="apply_and_return">Apply &amp; return</string>
     <string name="improper_request_ir">Improper Request (IR)</string>
     <string name="improper_request_recorded">Improper Request recorded: %1$s</string>
+    <string name="improper_request">Improper Request</string>
 </resources>
