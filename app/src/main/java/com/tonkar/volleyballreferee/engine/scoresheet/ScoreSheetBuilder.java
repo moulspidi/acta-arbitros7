@@ -1202,6 +1202,18 @@ public class ScoreSheetBuilder {
     card.appendChild(createLicencesDiv());
     return card;
     }
+    private String getIrLabel(com.tonkar.volleyballreferee.engine.api.model.SanctionDto s) {
+        try {
+            java.lang.reflect.Method getter = s.getClass().getMethod("isImproperRequest");
+            Object v = getter.invoke(s);
+            if (v instanceof Boolean && ((Boolean) v)) {
+                return " IR";
+            }
+        } catch (Throwable ignored) {}
+        return "";
+    }
+
+
     // Setters tipo "builder"
     public ScoreSheetBuilder setReferee1License(String license) {
         this.mReferee1License = license; return this;

@@ -48,6 +48,6 @@ public class SanctionDto {
 
     public static final int COACH = 100;
     public static final int TEAM  = 200;
+    @SerializedName("ir")
+    private boolean improperRequest;
 }
-
-

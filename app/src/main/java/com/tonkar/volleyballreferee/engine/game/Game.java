@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import com.tonkar.volleyballreferee.engine.Tags;
 import com.tonkar.volleyballreferee.engine.api.model.*;
 import com.tonkar.volleyballreferee.engine.game.sanction.*;
+import com.tonkar.volleyballreferee.engine.api.model.SanctionDto;
 import com.tonkar.volleyballreferee.engine.game.score.ScoreListener;
 import com.tonkar.volleyballreferee.engine.game.timeout.TimeoutListener;
 import com.tonkar.volleyballreferee.engine.rules.Rules;
@@ -1352,6 +1353,20 @@ public abstract class Game extends BaseGame {
         }
 
         return result;
+    }
+
+    @Override
+    public void markLastSanctionAsImproperRequest(com.tonkar.volleyballreferee.engine.team.TeamType teamType) {
+        java.util.List<SanctionDto> sanctions = getAllSanctions(teamType);
+        if (sanctions == null || sanctions.isEmpty()) return;
+        SanctionDto last = sanctions.get(sanctions.size() - 1);
+        try {
+            // If field exists
+            java.lang.reflect.Method setter = last.getClass().getMethod("setImproperRequest", boolean.class);
+            setter.invoke(last, true);
+        } catch (Throwable ignored) {
+            // If field not present at runtime, no-op (backward compatibility)
+        }
     }
 
 }

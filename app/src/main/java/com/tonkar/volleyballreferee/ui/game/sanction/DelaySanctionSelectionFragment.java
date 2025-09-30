@@ -87,8 +87,9 @@ public class DelaySanctionSelectionFragment extends Fragment {
             improperRequest.setOnClickListener(v -> {
                 TeamType team = teamType;
                 // Decide next delay sanction based on history
-                SanctionType next = mGame.getPossibleDelaySanction(team);
+                SanctionType next = SanctionType.DELAY_WARNING;
                 mGame.giveSanction(team, next, SanctionDto.TEAM);
+                mGame.markLastSanctionAsImproperRequest(team);
                 Toast.makeText(requireContext(), getString(R.string.improper_request_recorded, next.name()), Toast.LENGTH_SHORT).show();
                 mSanctionSelectionDialogFragment.dismiss();
             });
