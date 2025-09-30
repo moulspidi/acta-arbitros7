@@ -549,10 +549,9 @@ public class ScoreSheetBuilder {
         return sanctionsDiv;
     }
 
-    private Element createSanctionDiv(TeamType teamType, SanctionDto sanction) {        score = null;
-        delayLabel = null; /*UNIFIED_DECLS*/
-
-        Element sanctionDiv = new Element("div");
+    private Element createSanctionDiv(TeamType teamType, SanctionDto sanction) {        String score = null;
+        String delayLabel = null;
+Element sanctionDiv = new Element("div");
         sanctionDiv.addClass("div-grid-sanction");
 
         int player = sanction.getNum();
@@ -566,7 +565,7 @@ public class ScoreSheetBuilder {
         try { if (sanction.getCard().isDelaySanctionType() && sanction.isImproperRequest()) { score += " (IR)"; } } catch (Throwable ignored) {}
         
         // Build delay label for clarity
-        delayLabel = null;
+        String delayLabel = null;
         try {
             if (sanction.getCard().isDelaySanctionType()) {
                 if (sanction.isImproperRequest()) {
