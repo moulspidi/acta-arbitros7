@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Backward-compatible SanctionDto:
- * - Keeps 5-arg constructor for existing call sites.
- * - Adds boolean "improperRequest" (serialized as "ir") defaulting to false when using 5-arg ctor.
+ * Sanction DTO compatible hacia atrás:
+ * - Mantiene utilidades estáticas e instanciadas isPlayer/isCoach/isTeam que usa el resto del código.
+ * - Añade flag opcional "improperRequest" (JSON: "ir") para marcar solicitudes improcedentes (IR).
+ * - Conserva ctor de 5 parámetros y de 6 parámetros.
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,23 +37,47 @@ public class SanctionDto {
     @SerializedName("gp")
     private int guestPoints;
 
-    // New optional flag: true if this delay sanction originates from an Improper Request (IR)
+    // Nuevo: marca si esta sanción (de retraso) proviene de Improper Request (IR)
     @SerializedName("ir")
     private boolean improperRequest;
 
-    /** Backward-compatible 5-arg constructor (defaults improperRequest=false). */
+    /** Ctor legacy (5 args) para no romper llamadas existentes. */
     public SanctionDto(SanctionType card, int num, int set, int homePoints, int guestPoints) {
         this(card, num, set, homePoints, guestPoints, false);
     }
 
+    // --- Utilidades estáticas usadas por el motor/UI existentes ---
+
+    /** ¿El número corresponde a un entrenador? */
     public static boolean isCoach(int num) {
         return num == COACH;
     }
 
+    /** ¿El número corresponde al equipo (sanción al equipo)? */
     public static boolean isTeam(int num) {
         return num == TEAM;
     }
 
+    /** ¿El número corresponde a un jugador? (ni coach ni team) */
+    public static boolean isPlayer(int num) {
+        return !isCoach(num) && !isTeam(num);
+    }
+
+    // --- Atajos de instancia (sin parámetros) usados en varios adapters/dialogs ---
+
+    public boolean isCoach() {
+        return isCoach(this.num);
+    }
+
+    public boolean isTeam() {
+        return isTeam(this.num);
+    }
+
+    public boolean isPlayer() {
+        return isPlayer(this.num);
+    }
+
+    // Constantes de marcado especial
     public static final int COACH = 100;
     public static final int TEAM  = 200;
 }
