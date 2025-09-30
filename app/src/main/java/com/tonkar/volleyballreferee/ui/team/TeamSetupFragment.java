@@ -29,11 +29,6 @@ import com.tonkar.volleyballreferee.ui.util.UiUtils;
 import java.util.*;
 
 public class TeamSetupFragment extends Fragment implements BaseTeamServiceHandler {
-    private boolean isForceEdit() {
-        Bundle a = getArguments();
-        return a != null && a.getBoolean("force_edit", false);
-    }
-
 
     private LayoutInflater mLayoutInflater;
     private TeamType       mTeamType;

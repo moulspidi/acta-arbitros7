@@ -573,6 +573,7 @@ public class ScoreSheetBuilder {
             case RED_EXPULSION -> "expulsion-card-image";
             case RED_DISQUALIFICATION -> "disqualification-card-image";
             case DELAY_WARNING -> "delay-warning-image";
+            case IMPROPER_REQUEST -> "improper-request-image";
             default -> "delay-penalty-image";
         };
     }

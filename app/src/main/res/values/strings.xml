@@ -477,4 +477,5 @@
     <string name="close_match">Close match</string>
 
     <string name="apply_and_return">Apply &amp; return</string>
+    <string name="improper_request">Improper request</string>
 </resources>

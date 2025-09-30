@@ -26,6 +26,7 @@ public class SanctionSelectionDialogFragment extends DialogFragment implements G
     private BottomNavigationView                mSanctionTypePager;
     private DelaySanctionSelectionFragment      mDelaySanctionSelectionFragment;
     private MisconductSanctionSelectionFragment mMisconductSanctionSelectionFragment;
+    private ImproperRequestSanctionSelectionFragment mImproperRequestSanctionSelectionFragment;
 
     public static SanctionSelectionDialogFragment newInstance(String title, TeamType teamType) {
         SanctionSelectionDialogFragment fragment = new SanctionSelectionDialogFragment();
@@ -52,6 +53,7 @@ public class SanctionSelectionDialogFragment extends DialogFragment implements G
 
         mDelaySanctionSelectionFragment = DelaySanctionSelectionFragment.newInstance(mTeamType);
         mMisconductSanctionSelectionFragment = MisconductSanctionSelectionFragment.newInstance(mTeamType);
+        mImproperRequestSanctionSelectionFragment = ImproperRequestSanctionSelectionFragment.newInstance(mTeamType); // IR
 
         mSanctionTypePager = mView.findViewById(R.id.sanction_nav);
 
@@ -62,6 +64,9 @@ public class SanctionSelectionDialogFragment extends DialogFragment implements G
             if (itemId == R.id.delay_sanction_tab) {
                 fragment = mDelaySanctionSelectionFragment;
             } else if (itemId == R.id.misconduct_sanction_tab) {
+                fragment = mMisconductSanctionSelectionFragment;
+            } else if (itemId == R.id.improper_request_sanction_tab) {
+                fragment = mImproperRequestSanctionSelectionFragment;
                 fragment = mMisconductSanctionSelectionFragment;
             }
 
@@ -103,6 +108,9 @@ public class SanctionSelectionDialogFragment extends DialogFragment implements G
 
             if (selectedTab == R.id.delay_sanction_tab) {
                 enableOk = mDelaySanctionSelectionFragment.getSelectedDelaySanction() != null;
+            } else if (selectedTab == R.id.improper_request_sanction_tab) {
+                enableOk = mImproperRequestSanctionSelectionFragment.getSelectedImproperRequest() != null;
+                enableOk = mDelaySanctionSelectionFragment.getSelectedDelaySanction() != null;
             } else {
                 enableOk = (mMisconductSanctionSelectionFragment.getSelectedMisconductSanction() != null) && (mMisconductSanctionSelectionFragment.getSelectedMisconductPlayer() >= 0);
             }
@@ -123,6 +131,10 @@ public class SanctionSelectionDialogFragment extends DialogFragment implements G
                 fragment.init(this, mGame);
             }
             if (childFragment instanceof MisconductSanctionSelectionFragment fragment) {
+                fragment.init(this, mGame);
+            }
+            if (childFragment instanceof ImproperRequestSanctionSelectionFragment fragment) {
+                fragment.init(this, mGame);
                 fragment.init(this, mGame);
             }
         });

@@ -6,12 +6,14 @@ public enum SanctionType {
     RED_EXPULSION,
     RED_DISQUALIFICATION,
     DELAY_WARNING,
-    DELAY_PENALTY;
+    DELAY_PENALTY,
+    IMPROPER_REQUEST;
 
     public static String toLetter(SanctionType sanctionType) {
         return switch (sanctionType) {
             case DELAY_WARNING -> "DW";
             case DELAY_PENALTY -> "DP";
+            case IMPROPER_REQUEST -> "IR";
             case RED -> "R";
             case RED_EXPULSION -> "RE";
             case RED_DISQUALIFICATION -> "RD";
@@ -22,7 +24,8 @@ public enum SanctionType {
     public static SanctionType fromLetter(String letter) {
         return switch (letter) {
             case "DW" -> DELAY_WARNING;
-            case "DP" -> DELAY_PENALTY;
+            case "DP" -> DELAY_PENALTY,
+    IMPROPER_REQUEST;
             case "R" -> RED;
             case "RE" -> RED_EXPULSION;
             case "RD" -> RED_DISQUALIFICATION;
