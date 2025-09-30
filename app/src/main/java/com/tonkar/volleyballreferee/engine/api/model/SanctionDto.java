@@ -11,9 +11,9 @@ import lombok.Setter;
 
 /**
  * Sanction DTO (retrocompatible)
- * - Mantiene helpers estáticos e instancia: isPlayer/isCoach/isTeam
- * - Campo opcional improperRequest (JSON: "ir")
- * - Ctor 6-args (Lombok) y ctor 5-args legacy
+ * - Campo improperRequest (JSON: "ir")
+ * - Constructores de 5 y 6 argumentos
+ * - Helpers estáticos e instancia isPlayer/isCoach/isTeam
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,17 +40,15 @@ public class SanctionDto {
     @SerializedName("ir")
     private boolean improperRequest;
 
-    /** Legacy ctor (sin IR) para compatibilidad con llamadas existentes */
+    /** Constructor legacy 5 args: por defecto improperRequest=false */
     public SanctionDto(SanctionType card, int num, int set, int homePoints, int guestPoints) {
         this(card, num, set, homePoints, guestPoints, false);
     }
 
-    // ---- Helpers estáticos usados por motor y UI ----
     public static boolean isCoach(int num) { return num == COACH; }
     public static boolean isTeam(int num)  { return num == TEAM; }
     public static boolean isPlayer(int num){ return !isCoach(num) && !isTeam(num); }
 
-    // ---- Conveniencias de instancia (sin parámetros) ----
     public boolean isCoach()  { return isCoach(this.num); }
     public boolean isTeam()   { return isTeam(this.num); }
     public boolean isPlayer() { return isPlayer(this.num); }
