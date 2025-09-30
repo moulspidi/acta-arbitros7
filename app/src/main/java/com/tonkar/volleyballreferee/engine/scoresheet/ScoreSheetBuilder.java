@@ -456,6 +456,8 @@ public class ScoreSheetBuilder {
                                      TeamType.HOME.equals(teamType) ? substitution.getHomePoints() : substitution.getGuestPoints(),
                                      TeamType.HOME.equals(teamType) ? substitution.getGuestPoints() : substitution.getHomePoints());
 
+        
+        try { if (sanction.getCard().isDelaySanctionType() && sanction.isImproperRequest()) { score += " (IR)"; } } catch (Throwable ignored) {}
         substitutionDiv.appendChild(createPlayerSpan(teamType, substitution.getPlayerIn(), false));
         substitutionDiv.appendChild(new Element("div").addClass("substitution-image"));
         substitutionDiv.appendChild(createPlayerSpan(teamType, substitution.getPlayerOut(), false));
@@ -1130,21 +1132,30 @@ public class ScoreSheetBuilder {
     
 private Element createLicencesDiv() {
         Element row = new Element("div");
-        row.addClass("licences");
+        row.attr("style", "display:flex;gap:8px;background:#eee;padding:8px;border:1px solid #ccc;border-radius:6px;margin-top:8px;");
 
-        Element b1 = new Element("div").addClass("licence-item");
-        b1.appendElement("div").addClass("licence-label").text(mContext.getString(R.string.licence_referee_1));
-        b1.appendElement("div").addClass("licence-value").text(mReferee1License != null ? mReferee1License : "");
+        Element b1 = new Element("div");
+        b1.attr("style", "flex:1;background:#eee;border:1px dashed #bbb;border-radius:6px;min-height:72px;padding:8px;");
+        b1.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+          .text(mContext.getString(R.string.licence_referee_1));
+        b1.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
+          .text(mReferee1License != null ? mReferee1License : "");
         row.appendChild(b1);
 
-        Element b2 = new Element("div").addClass("licence-item");
-        b2.appendElement("div").addClass("licence-label").text(mContext.getString(R.string.licence_referee_2));
-        b2.appendElement("div").addClass("licence-value").text(mReferee2License != null ? mReferee2License : "");
+        Element b2 = new Element("div");
+        b2.attr("style", "flex:1;background:#eee;border:1px dashed #bbb;border-radius:6px;min-height:72px;padding:8px;");
+        b2.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+          .text(mContext.getString(R.string.licence_referee_2));
+        b2.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
+          .text(mReferee2License != null ? mReferee2License : "");
         row.appendChild(b2);
 
-        Element b3 = new Element("div").addClass("licence-item");
-        b3.appendElement("div").addClass("licence-label").text(mContext.getString(R.string.licence_scorer));
-        b3.appendElement("div").addClass("licence-value").text(mScorerLicense != null ? mScorerLicense : "");
+        Element b3 = new Element("div");
+        b3.attr("style", "flex:1;background:#eee;border:1px dashed #bbb;border-radius:6px;min-height:72px;padding:8px;");
+        b3.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
+          .text(mContext.getString(R.string.licence_scorer));
+        b3.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
+          .text(mScorerLicense != null ? mScorerLicense : "");
         row.appendChild(b3);
 
         return row;
@@ -1259,13 +1270,7 @@ private Element createLicencesDiv() {
             + "      .horizontal-spacing { min-width:34px; }\n"
             + "      .border { border:1px solid " + colorIntToHtml(ContextCompat.getColor(mContext, R.color.colorOnScoreSheetBackground)) + "; "
             + "                margin-right:-1px; margin-left:-1px; }\n"
-            + "      .new-page-for-printers { break-before: page; }
-      /* Licences as flex row */
-      .licences { display:flex; gap:8px; background:#eee; padding:8px; border:1px solid #ccc; border-radius:6px; margin-top:8px; }
-      .licence-item { flex:1; background:#eee; border:1px dashed #bbb; border-radius:6px; min-height:72px; padding:8px; }
-      .licence-label{ font-size:11px; color:#555; margin-bottom:4px; font-weight:600; }
-      .licence-value{ font-size:13px; color:#222; word-break:break-word; }
-\n"
+            + "      .new-page-for-printers { break-before: page; }\n"
             + "    </style>\n"
             + "    <style type=\"text/css\" media=\"print\"> body { -webkit-print-color-adjust: exact; } </style>\n"
             + "  </head>\n"
