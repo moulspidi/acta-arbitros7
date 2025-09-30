@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/big_margin_size">
-
+    android:layout_height="wrap_content">
+    <!-- Layout mínimo; el cálculo de la sanción se hace en el Fragment -->
     <TextView
-        android:id="@+id/improper_request_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:text="@string/improper_request"/>
-</LinearLayout>
+        android:text="@string/improper_request_ir"
+        android:padding="16dp"/>
+</FrameLayout>
