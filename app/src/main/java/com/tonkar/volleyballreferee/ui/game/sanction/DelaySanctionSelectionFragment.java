@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.tonkar.volleyballreferee.R;
 import com.tonkar.volleyballreferee.engine.game.IGame;
+import com.tonkar.volleyballreferee.engine.api.model.SanctionDto;
 import com.tonkar.volleyballreferee.engine.game.sanction.SanctionType;
 import com.tonkar.volleyballreferee.engine.team.TeamType;
 import com.tonkar.volleyballreferee.ui.team.PlayerToggleButton;
@@ -84,10 +85,10 @@ public class DelaySanctionSelectionFragment extends Fragment {
         View improperRequest = view.findViewById(R.id.btn_improper_request);
         if (improperRequest != null) {
             improperRequest.setOnClickListener(v -> {
-                TeamType team = mSanctionSelectionDialogFragment.getSelectedTeamType();
+                TeamType team = teamType;
                 // Decide next delay sanction based on history
                 SanctionType next = mGame.getPossibleDelaySanction(team);
-                mGame.giveSanction(team, next, /*TEAM*/ 200);
+                mGame.giveSanction(team, next, SanctionDto.TEAM);
                 Toast.makeText(requireContext(), getString(R.string.improper_request_recorded, next.name()), Toast.LENGTH_SHORT).show();
                 mSanctionSelectionDialogFragment.dismiss();
             });
