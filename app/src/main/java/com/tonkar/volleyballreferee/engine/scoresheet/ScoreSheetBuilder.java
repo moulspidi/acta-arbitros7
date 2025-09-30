@@ -1184,8 +1184,13 @@ public class ScoreSheetBuilder {
         return row;
     }
     private Element createLicencesCard() {
-        org.jsoup.nodes.Element card = createCardDiv();
-        card.appendChild(createCardTitleSpan(mContext.getString(R.string.licences)));
+        org.jsoup.nodes.Element card = new org.jsoup.nodes.Element("div");
+        card.attr("style","margin-top:8px;margin-bottom:8px;padding:8px;border:1px solid #ccc;border-radius:6px;background:#fff;");
+        // Título
+        card.appendElement("div")
+            .attr("style","font-weight:700;margin-bottom:6px;")
+            .text(mContext.getString(R.string.licences));
+        // Bloques en nuevo formato
         card.appendChild(createLicencesDiv());
         card.appendChild(createTechnicalStaffDiv());
         return card;
