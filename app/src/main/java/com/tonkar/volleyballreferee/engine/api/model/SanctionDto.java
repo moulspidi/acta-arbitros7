@@ -57,4 +57,12 @@ public class SanctionDto {
 
     public static final int COACH = 100;
     public static final int TEAM  = 200;
+
+    public boolean isImproperRequest() { return improperRequest; }
+    public void setImproperRequest(boolean improperRequest) { this.improperRequest = improperRequest; }
+
+    public SanctionDto(SanctionType card, int num, int set, int homePoints, int guestPoints, boolean improperRequest) {
+        this(card, num, set, homePoints, guestPoints);
+        this.improperRequest = improperRequest;
+    }
 }

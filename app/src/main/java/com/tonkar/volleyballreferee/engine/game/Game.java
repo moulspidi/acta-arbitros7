@@ -1094,7 +1094,7 @@ public abstract class Game extends BaseGame {
         boolean teamHasReachedPenalty = false;
 
         for (SanctionDto sanction : getAllSanctions(teamType)) {
-            if (sanction.getCard().isDelaySanctionType() && !sanction.isImproperRequest()) {
+            if (sanction.getCard().isDelaySanctionType()) {
                 teamHasReachedPenalty = true;
                 break;
             }
@@ -1369,14 +1369,11 @@ public abstract class Game extends BaseGame {
         }
     }
 
-    @Override
-    public void addImproperRequest(TeamType teamType) {
-        // Registrar como Delay Warning y marcar la última como IR
-        giveSanction(teamType,
-                com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_WARNING,
-                com.tonkar.volleyballreferee.engine.api.model.SanctionDto.TEAM);
-        try {
-            markLastSanctionAsImproperRequest(teamType);
-        } catch (Throwable ignored) {}
+
+    public com.tonkar.volleyballreferee.engine.api.model.SanctionDto getLastSanction(TeamType team) {
+        java.util.List<com.tonkar.volleyballreferee.engine.api.model.SanctionDto> list =
+                (team == TeamType.HOME) ? mHomeSanctions : mGuestSanctions;
+        if (list != null && !list.isEmpty()) return list.get(list.size() - 1);
+        return null;
     }
 }
