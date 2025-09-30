@@ -586,7 +586,64 @@ public class ScoreSheetBuilder {
         sanctionDiv.appendChild(createCellSpan(score, false, false));
 
         return sanctionDiv;
-    }
+
+        // Rebuild score safely
+        String score = String.format(
+                java.util.Locale.getDefault(),
+                "%d-%d",
+                teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getHomePoints() : sanction.getGuestPoints(),
+                teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getGuestPoints() : sanction.getHomePoints()
+        );
+        // Badge for delay family
+        String delayLabel = null;
+        try {
+            if (sanction.getCard().isDelaySanctionType()) {
+                if (sanction.isImproperRequest()) {
+                    delayLabel = "IR";
+                } else if (sanction.getCard() == com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_WARNING) {
+                    delayLabel = "Delay Warning";
+                } else if (sanction.getCard() == com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_PENALTY) {
+                    delayLabel = "Delay Penalty";
+                }
+            }
+        } catch (Throwable ignored) {}
+        if (delayLabel != null && (score == null || score.isEmpty())) {
+            score = delayLabel;
+        } else if (delayLabel != null) {
+            score = delayLabel + " · " + score;
+        }
+        sanctionDiv.appendChild(createCellSpan(score, false, false));
+    
+
+
+        // Rebuild score safely
+        String score = String.format(
+                java.util.Locale.getDefault(),
+                "%d-%d",
+                teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getHomePoints() : sanction.getGuestPoints(),
+                teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getGuestPoints() : sanction.getHomePoints()
+        );
+        // Badge for delay family
+        String delayLabel = null;
+        try {
+            if (sanction.getCard().isDelaySanctionType()) {
+                if (sanction.isImproperRequest()) {
+                    delayLabel = "IR";
+                } else if (sanction.getCard() == com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_WARNING) {
+                    delayLabel = "Delay Warning";
+                } else if (sanction.getCard() == com.tonkar.volleyballreferee.engine.game.sanction.SanctionType.DELAY_PENALTY) {
+                    delayLabel = "Delay Penalty";
+                }
+            }
+        } catch (Throwable ignored) {}
+        if (delayLabel != null && (score == null || score.isEmpty())) {
+            score = delayLabel;
+        } else if (delayLabel != null) {
+            score = delayLabel + " · " + score;
+        }
+        sanctionDiv.appendChild(createCellSpan(score, false, false));
+    
+}
 
     private String getSanctionImageClass(SanctionType sanctionType) {
         return switch (sanctionType) {
@@ -1307,30 +1364,35 @@ public class ScoreSheetBuilder {
     }
 
 
+    
     private org.jsoup.nodes.Element createTechnicalStaffDiv() {
         org.jsoup.nodes.Element block = new org.jsoup.nodes.Element("div");
         block.attr("style", "margin-top:8px;padding:8px;border:1px solid #ccc;border-radius:6px;background:#f6f6f6;");
         block.appendElement("div").attr("style","font-weight:700;margin-bottom:6px;").text(mContext.getString(R.string.technical_staff));
+
         org.jsoup.nodes.Element row = new org.jsoup.nodes.Element("div");
-        row.attr("style", "display:flex;gap:8px;");
+        row.attr("style", "display:flex;gap:8px;flex-wrap:wrap;");
 
-        org.jsoup.nodes.Element ac = new org.jsoup.nodes.Element("div");
-        ac.attr("style","flex:1;border:1px dashed #bbb;border-radius:6px;background:#fff;padding:8px;");
-        ac.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
-          .text(mContext.getString(R.string.assistant_coach));
-        ac.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
-          .text("");
-        row.appendChild(ac);
+        String acHome  = (mHomeCoachLicence  != null && !mHomeCoachLicence.trim().isEmpty())  ? mHomeCoachLicence  : "—";
+        String acGuest = (mGuestCoachLicence != null && !mGuestCoachLicence.trim().isEmpty()) ? mGuestCoachLicence : "—";
+        String stHome  = (mHomeStaffLicence  != null && !mHomeStaffLicence.trim().isEmpty())  ? mHomeStaffLicence  : "—";
+        String stGuest = (mGuestStaffLicence != null && !mGuestStaffLicence.trim().isEmpty()) ? mGuestStaffLicence : "—";
 
-        org.jsoup.nodes.Element st = new org.jsoup.nodes.Element("div");
-        st.attr("style","flex:1;border:1px dashed #bbb;border-radius:6px;background:#fff;padding:8px;");
-        st.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;")
-          .text(mContext.getString(R.string.staff));
-        st.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;")
-          .text("");
-        row.appendChild(st);
+        row.appendChild(makeStaffBox(mContext.getString(R.string.assistant_coach) + " (Home)",  acHome));
+        row.appendChild(makeStaffBox(mContext.getString(R.string.assistant_coach) + " (Guest)", acGuest));
+        row.appendChild(makeStaffBox(mContext.getString(R.string.staff) + " (Home)",  stHome));
+        row.appendChild(makeStaffBox(mContext.getString(R.string.staff) + " (Guest)", stGuest));
 
         block.appendChild(row);
         return block;
     }
+
+    private org.jsoup.nodes.Element makeStaffBox(String label, String value) {
+        org.jsoup.nodes.Element box = new org.jsoup.nodes.Element("div");
+        box.attr("style","flex:1 1 48%;border:1px dashed #bbb;border-radius:6px;background:#fff;padding:8px;min-height:64px;");
+        box.appendElement("div").attr("style","font-size:11px;color:#555;margin-bottom:4px;font-weight:600;").text(label);
+        box.appendElement("div").attr("style","font-size:13px;color:#222;word-break:break-word;").text(value);
+        return box;
+    }
+    
 }
