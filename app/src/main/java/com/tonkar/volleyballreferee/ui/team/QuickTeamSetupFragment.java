@@ -24,6 +24,11 @@ import com.tonkar.volleyballreferee.ui.util.UiUtils;
 import java.util.Locale;
 
 public class QuickTeamSetupFragment extends Fragment implements BaseTeamServiceHandler {
+    private boolean isForceEdit() {
+        Bundle a = getArguments();
+        return a != null && a.getBoolean("force_edit", false);
+    }
+
 
     private TeamType       mTeamType;
     private IBaseTeam      mTeamService;

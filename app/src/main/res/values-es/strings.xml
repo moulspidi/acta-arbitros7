@@ -347,4 +347,6 @@
     <string name="asistant_coach_guest">Asistente de entrenador (Guest)</string>
     <string name="staff_home">Staff (Home)</string>
     <string name="staff_guest">Staff (Guest)</string>
+    <string name="improper_request_ir">Solicitud improcedente (IR)</string>
+    <string name="improper_request_recorded">Solicitud improcedente registrada: %1$s</string>
 </resources>

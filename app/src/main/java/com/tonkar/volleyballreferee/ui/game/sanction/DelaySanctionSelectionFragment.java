@@ -6,6 +6,8 @@ import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.widget.Toast;
+
 import com.tonkar.volleyballreferee.R;
 import com.tonkar.volleyballreferee.engine.game.IGame;
 import com.tonkar.volleyballreferee.engine.game.sanction.SanctionType;
@@ -77,6 +79,19 @@ public class DelaySanctionSelectionFragment extends Fragment {
 
         mSelectedDelaySanction = null;
         mSanctionSelectionDialogFragment.computeOkAvailability(R.id.delay_sanction_tab);
+
+        // Improper Request (IR): map to next delay sanction (warning or penalty)
+        View improperRequest = view.findViewById(R.id.btn_improper_request);
+        if (improperRequest != null) {
+            improperRequest.setOnClickListener(v -> {
+                TeamType team = mSanctionSelectionDialogFragment.getSelectedTeamType();
+                // Decide next delay sanction based on history
+                SanctionType next = mGame.getPossibleDelaySanction(team);
+                mGame.giveSanction(team, next, /*TEAM*/ 200);
+                Toast.makeText(requireContext(), getString(R.string.improper_request_recorded, next.name()), Toast.LENGTH_SHORT).show();
+                mSanctionSelectionDialogFragment.dismiss();
+            });
+        }
 
         return view;
     }

@@ -25,6 +25,14 @@
             android:layout_margin="@dimen/default_margin_size"
             android:text="@string/yellow_card"
             android:textAllCaps="false" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_improper_request"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/improper_request_ir"
+            android:layout_marginTop="8dp" />
+
 
     </LinearLayout>
 

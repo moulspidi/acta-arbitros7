@@ -11,10 +11,4 @@
         android:icon="@drawable/ic_sanctions_tab"
         android:title="@string/misconduct_sanction" />
 
-
-    <item
-        android:id="@+id/improper_request_sanction_tab"
-        android:icon="@drawable/ic_thumb_timeout_white"
-        android:title="@string/improper_request" />
-
 </menu>
