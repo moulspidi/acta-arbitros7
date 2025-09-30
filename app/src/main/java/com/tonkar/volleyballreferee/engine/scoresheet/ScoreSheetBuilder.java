@@ -456,8 +456,6 @@ public class ScoreSheetBuilder {
                                      TeamType.HOME.equals(teamType) ? substitution.getHomePoints() : substitution.getGuestPoints(),
                                      TeamType.HOME.equals(teamType) ? substitution.getGuestPoints() : substitution.getHomePoints());
 
-        
-        try { if (sanction.getCard().isDelaySanctionType() && sanction.isImproperRequest()) { score += " (IR)"; } } catch (Throwable ignored) {}
         substitutionDiv.appendChild(createPlayerSpan(teamType, substitution.getPlayerIn(), false));
         substitutionDiv.appendChild(new Element("div").addClass("substitution-image"));
         substitutionDiv.appendChild(createPlayerSpan(teamType, substitution.getPlayerOut(), false));
@@ -1129,8 +1127,7 @@ public class ScoreSheetBuilder {
     private String colorIntToHtml(int color) {
         return String.format("#%06X", (0xFFFFFF & color)).toLowerCase();
     }
-    
-private Element createLicencesDiv() {
+    private Element createLicencesDiv() {
         Element row = new Element("div");
         row.attr("style", "display:flex;gap:8px;background:#eee;padding:8px;border:1px solid #ccc;border-radius:6px;margin-top:8px;");
 
@@ -1160,7 +1157,6 @@ private Element createLicencesDiv() {
 
         return row;
     }
-
     private Element createLicencesCard() {
     Element card = new Element("div");
     card.addClass("div-card").addClass("spacing-before");
