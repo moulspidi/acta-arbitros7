@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Backward-compatible SanctionDto:
- * - Keeps 5-arg constructor for existing call sites.
- * - Adds boolean "improperRequest" (serialized as "ir") defaulting to false when using 5-arg ctor.
+ * Sanction DTO (retrocompatible)
+ * - Mantiene helpers estáticos e instancia: isPlayer/isCoach/isTeam
+ * - Campo opcional improperRequest (JSON: "ir")
+ * - Ctor 6-args (Lombok) y ctor 5-args legacy
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,22 +37,23 @@ public class SanctionDto {
     @SerializedName("gp")
     private int guestPoints;
 
-    // New optional flag: true if this delay sanction originates from an Improper Request (IR)
     @SerializedName("ir")
     private boolean improperRequest;
 
-    /** Backward-compatible 5-arg constructor (defaults improperRequest=false). */
+    /** Legacy ctor (sin IR) para compatibilidad con llamadas existentes */
     public SanctionDto(SanctionType card, int num, int set, int homePoints, int guestPoints) {
         this(card, num, set, homePoints, guestPoints, false);
     }
 
-    public static boolean isCoach(int num) {
-        return num == COACH;
-    }
+    // ---- Helpers estáticos usados por motor y UI ----
+    public static boolean isCoach(int num) { return num == COACH; }
+    public static boolean isTeam(int num)  { return num == TEAM; }
+    public static boolean isPlayer(int num){ return !isCoach(num) && !isTeam(num); }
 
-    public static boolean isTeam(int num) {
-        return num == TEAM;
-    }
+    // ---- Conveniencias de instancia (sin parámetros) ----
+    public boolean isCoach()  { return isCoach(this.num); }
+    public boolean isTeam()   { return isTeam(this.num); }
+    public boolean isPlayer() { return isPlayer(this.num); }
 
     public static final int COACH = 100;
     public static final int TEAM  = 200;
