@@ -549,13 +549,15 @@ public class ScoreSheetBuilder {
         return sanctionsDiv;
     }
 
-    private Element createSanctionDiv(TeamType teamType, SanctionDto sanction) {
+    private Element createSanctionDiv(TeamType teamType, SanctionDto sanction) {        score = null;
+        delayLabel = null; /*UNIFIED_DECLS*/
+
         Element sanctionDiv = new Element("div");
         sanctionDiv.addClass("div-grid-sanction");
 
         int player = sanction.getNum();
 
-        String score = String.format(Locale.getDefault(), "%d-%d",
+        score = String.format(Locale.getDefault(), "%d-%d",
                                      TeamType.HOME.equals(teamType) ? sanction.getHomePoints() : sanction.getGuestPoints(),
                                      TeamType.HOME.equals(teamType) ? sanction.getGuestPoints() : sanction.getHomePoints());
 
@@ -564,7 +566,7 @@ public class ScoreSheetBuilder {
         try { if (sanction.getCard().isDelaySanctionType() && sanction.isImproperRequest()) { score += " (IR)"; } } catch (Throwable ignored) {}
         
         // Build delay label for clarity
-        String delayLabel = null;
+        delayLabel = null;
         try {
             if (sanction.getCard().isDelaySanctionType()) {
                 if (sanction.isImproperRequest()) {
@@ -588,14 +590,14 @@ public class ScoreSheetBuilder {
         return sanctionDiv;
 
         // Rebuild score safely
-        String score = String.format(
+        score = String.format(
                 java.util.Locale.getDefault(),
                 "%d-%d",
                 teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getHomePoints() : sanction.getGuestPoints(),
                 teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getGuestPoints() : sanction.getHomePoints()
         );
         // Badge for delay family
-        String delayLabel = null;
+        delayLabel = null;
         try {
             if (sanction.getCard().isDelaySanctionType()) {
                 if (sanction.isImproperRequest()) {
@@ -617,14 +619,14 @@ public class ScoreSheetBuilder {
 
 
         // Rebuild score safely
-        String score = String.format(
+        score = String.format(
                 java.util.Locale.getDefault(),
                 "%d-%d",
                 teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getHomePoints() : sanction.getGuestPoints(),
                 teamType == com.tonkar.volleyballreferee.engine.team.TeamType.HOME ? sanction.getGuestPoints() : sanction.getHomePoints()
         );
         // Badge for delay family
-        String delayLabel = null;
+        delayLabel = null;
         try {
             if (sanction.getCard().isDelaySanctionType()) {
                 if (sanction.isImproperRequest()) {
