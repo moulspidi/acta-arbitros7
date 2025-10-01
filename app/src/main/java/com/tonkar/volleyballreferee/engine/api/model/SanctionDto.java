@@ -12,7 +12,6 @@ import lombok.*;
  * - Ctor 6-args (Lombok) y ctor 5-args legacy
  */
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
