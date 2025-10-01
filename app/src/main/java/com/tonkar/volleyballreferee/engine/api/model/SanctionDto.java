@@ -3,7 +3,7 @@ package com.tonkar.volleyballreferee.engine.api.model;
 import com.google.gson.annotations.SerializedName;
 import com.tonkar.volleyballreferee.engine.game.sanction.SanctionType;
 
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Setter;
  * - Ctor 6-args (Lombok) y ctor 5-args legacy
  */
 @NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
