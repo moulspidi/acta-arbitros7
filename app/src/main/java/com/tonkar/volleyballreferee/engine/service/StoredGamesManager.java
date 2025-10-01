@@ -337,7 +337,7 @@ public class StoredGamesManager implements StoredGamesService, ScoreListener, Te
             mStoredGame.setScore(mGame.getScore());
             mStoredGame.setStartTime(mGame.getStartTime());
             mStoredGame.setEndTime(mGame.getEndTime());
-            // TEAMSYNC PATCH (v3): keep team/league/rules in sync while match is live
+            // TEAMSYNC PATCH (v12): keep team/league/rules in sync while match is live
             if (mGame.getLeague() != null && mGame.getKind().equals(mGame.getLeague().getKind())
                     && mGame.getLeague().getName().length() > 1 && mGame.getLeague().getDivision().length() > 1) {
                 SelectedLeagueDto league = new SelectedLeagueDto();
@@ -348,7 +348,7 @@ public class StoredGamesManager implements StoredGamesService, ScoreListener, Te
             }
             mStoredGame.setRules(mGame.getRules());
 
-            // HOME
+            // HOME team snapshot
             {
                 TeamDto t = mStoredGame.getTeam(TeamType.HOME);
                 t.setId(mGame.getTeamId(TeamType.HOME));
@@ -369,7 +369,7 @@ public class StoredGamesManager implements StoredGamesService, ScoreListener, Te
                     else t.getPlayers().add(p);
                 }
             }
-            // GUEST
+            // GUEST team snapshot
             {
                 TeamDto t = mStoredGame.getTeam(TeamType.GUEST);
                 t.setId(mGame.getTeamId(TeamType.GUEST));

@@ -102,11 +102,10 @@ public class GameSetupActivity extends AppCompatActivity {
                 }
             }
             
-            // If set hasn't started (0-0), ensure starting lineup is NOT locked so roster edits reflect
+            // unlock_lineup_0_0: if set is 0-0, allow changes to starting lineup to take effect
             try {
                 boolean noPoints = mGame.getPoints(TeamType.HOME) == 0 && mGame.getPoints(TeamType.GUEST) == 0;
                 if (noPoints) {
-                    // Use reflection to clear 'startingLineupConfirmed' on current set compositions
                     java.lang.reflect.Method currentSet = mGame.getClass().getDeclaredMethod("currentSet");
                     currentSet.setAccessible(true);
                     Object set = currentSet.invoke(mGame);
@@ -118,7 +117,7 @@ public class GameSetupActivity extends AppCompatActivity {
                     f.setBoolean(homeComp, false);
                     f.setBoolean(guestComp, false);
                 }
-            } catch (Throwable ignored) { }
+            } catch (Throwable ignored) {}
 
             storedGamesService.saveCurrentGame(true);
         } else {
@@ -169,11 +168,10 @@ public class GameSetupActivity extends AppCompatActivity {
                 }
             }
             
-            // If set hasn't started (0-0), ensure starting lineup is NOT locked so roster edits reflect
+            // unlock_lineup_0_0: if set is 0-0, allow changes to starting lineup to take effect
             try {
                 boolean noPoints = mGame.getPoints(TeamType.HOME) == 0 && mGame.getPoints(TeamType.GUEST) == 0;
                 if (noPoints) {
-                    // Use reflection to clear 'startingLineupConfirmed' on current set compositions
                     java.lang.reflect.Method currentSet = mGame.getClass().getDeclaredMethod("currentSet");
                     currentSet.setAccessible(true);
                     Object set = currentSet.invoke(mGame);
@@ -185,7 +183,7 @@ public class GameSetupActivity extends AppCompatActivity {
                     f.setBoolean(homeComp, false);
                     f.setBoolean(guestComp, false);
                 }
-            } catch (Throwable ignored) { }
+            } catch (Throwable ignored) {}
 
             storedGamesService.saveCurrentGame(true);
         }
