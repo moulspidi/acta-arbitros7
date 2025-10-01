@@ -101,6 +101,25 @@ public class GameSetupActivity extends AppCompatActivity {
                     ((StoredGamesManager) storedGamesService).connectGameRecorder(mGame);
                 }
             }
+            
+            // If set hasn't started (0-0), ensure starting lineup is NOT locked so roster edits reflect
+            try {
+                boolean noPoints = mGame.getPoints(TeamType.HOME) == 0 && mGame.getPoints(TeamType.GUEST) == 0;
+                if (noPoints) {
+                    // Use reflection to clear 'startingLineupConfirmed' on current set compositions
+                    java.lang.reflect.Method currentSet = mGame.getClass().getDeclaredMethod("currentSet");
+                    currentSet.setAccessible(true);
+                    Object set = currentSet.invoke(mGame);
+                    java.lang.reflect.Method getTeamComposition = set.getClass().getDeclaredMethod("getTeamComposition", TeamType.class);
+                    Object homeComp = getTeamComposition.invoke(set, TeamType.HOME);
+                    Object guestComp = getTeamComposition.invoke(set, TeamType.GUEST);
+                    java.lang.reflect.Field f = homeComp.getClass().getDeclaredField("mStartingLineupConfirmed");
+                    f.setAccessible(true);
+                    f.setBoolean(homeComp, false);
+                    f.setBoolean(guestComp, false);
+                }
+            } catch (Throwable ignored) { }
+
             storedGamesService.saveCurrentGame(true);
         } else {
             storedGamesService.saveSetupGame(mGame);
@@ -149,10 +168,29 @@ public class GameSetupActivity extends AppCompatActivity {
                     ((StoredGamesManager) storedGamesService).connectGameRecorder(mGame);
                 }
             }
+            
+            // If set hasn't started (0-0), ensure starting lineup is NOT locked so roster edits reflect
+            try {
+                boolean noPoints = mGame.getPoints(TeamType.HOME) == 0 && mGame.getPoints(TeamType.GUEST) == 0;
+                if (noPoints) {
+                    // Use reflection to clear 'startingLineupConfirmed' on current set compositions
+                    java.lang.reflect.Method currentSet = mGame.getClass().getDeclaredMethod("currentSet");
+                    currentSet.setAccessible(true);
+                    Object set = currentSet.invoke(mGame);
+                    java.lang.reflect.Method getTeamComposition = set.getClass().getDeclaredMethod("getTeamComposition", TeamType.class);
+                    Object homeComp = getTeamComposition.invoke(set, TeamType.HOME);
+                    Object guestComp = getTeamComposition.invoke(set, TeamType.GUEST);
+                    java.lang.reflect.Field f = homeComp.getClass().getDeclaredField("mStartingLineupConfirmed");
+                    f.setAccessible(true);
+                    f.setBoolean(homeComp, false);
+                    f.setBoolean(guestComp, false);
+                }
+            } catch (Throwable ignored) { }
+
             storedGamesService.saveCurrentGame(true);
         }
         // Volver al partido
-        final Intent gameIntent = new Intent(GameSetupActivity.this, GameActivity.class);
+        final Intent gameIntent = new Intent(GameSetupActivity.this, GameActivity.class).putExtra("from_edit_current", true);
         gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         gameIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -172,7 +210,7 @@ public class GameSetupActivity extends AppCompatActivity {
             StoredGamesService storedGamesService = new StoredGamesManager(this);
             storedGamesService.createCurrentGame(mGame);
             Log.i(Tags.SETUP_UI, "Start game activity");
-            final Intent gameIntent = new Intent(GameSetupActivity.this, GameActivity.class);
+            final Intent gameIntent = new Intent(GameSetupActivity.this, GameActivity.class).putExtra("from_edit_current", true);
             gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             gameIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
