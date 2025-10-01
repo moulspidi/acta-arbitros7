@@ -707,6 +707,44 @@ public class GameActivity extends AppCompatActivity
             actionBar.setTitle(title);
         }
     }
+
+    private void reloadCurrentGameIfNeeded(Intent intent) {
+        try {
+            boolean fromEdit = intent != null && intent.getBooleanExtra("from_edit_current", false);
+            if (fromEdit && mStoredGamesService != null) {
+                IGame fresh = mStoredGamesService.loadCurrentGame();
+                if (fresh != null) {
+                    try {
+                        mGame.removeScoreListener(this);
+                        mGame.removeTimeoutListener(this);
+                        mGame.removeTeamListener(this);
+                        mGame.removeSanctionListener(this);
+                    } catch (Throwable ignored) {}
+                    mGame = fresh;
+                    mGame.addScoreListener(this);
+                    mGame.addTimeoutListener(this);
+                    mGame.addTeamListener(this);
+                    mGame.addSanctionListener(this);
+                    mStoredGamesService.connectGameRecorder(mGame);
+                    if (mLeftTeamNameText != null) mLeftTeamNameText.setText(mGame.getTeamName(TeamType.HOME));
+                    if (mRightTeamNameText != null) mRightTeamNameText.setText(mGame.getTeamName(TeamType.GUEST));
+                }
+                intent.removeExtra("from_edit_current");
+            }
+        } catch (Throwable ignored) { }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        reloadCurrentGameIfNeeded(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reloadCurrentGameIfNeeded(getIntent());
+    }
 }
 
 }
