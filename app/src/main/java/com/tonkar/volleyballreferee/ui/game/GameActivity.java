@@ -707,24 +707,17 @@ public class GameActivity extends AppCompatActivity
             actionBar.setTitle(title);
         }
     }
-
-    @Override
-    protected void onResume(){ super.onResume(); reloadCurrentGameIfNeeded(getIntent());
-        if (preSignCoaches && !askedPreSignOnce) {
-            askedPreSignOnce = true;
-            Intent sheet = new Intent(this, ScoreSheetActivity.class);
-            sheet.putExtra("pre_sign_coaches", true);
-            startActivity(sheet);
-        }
-    }
 }
+
+}
+    
+
     private void reloadCurrentGameIfNeeded(Intent intent) {
         try {
             boolean fromEdit = intent != null && intent.getBooleanExtra("from_edit_current", false);
             if (fromEdit && mStoredGamesService != null) {
                 IGame fresh = mStoredGamesService.loadCurrentGame();
                 if (fresh != null) {
-                    // detach listeners from old game
                     try {
                         mGame.removeScoreListener(this);
                         mGame.removeTimeoutListener(this);
@@ -737,21 +730,23 @@ public class GameActivity extends AppCompatActivity
                     mGame.addTeamListener(this);
                     mGame.addSanctionListener(this);
                     mStoredGamesService.connectGameRecorder(mGame);
-                    // basic UI rebinding
-                    mLeftTeamNameText.setText(mGame.getTeamName(TeamType.HOME));
-                    mRightTeamNameText.setText(mGame.getTeamName(TeamType.GUEST));
+                    if (mLeftTeamNameText != null) mLeftTeamNameText.setText(mGame.getTeamName(TeamType.HOME));
+                    if (mRightTeamNameText != null) mRightTeamNameText.setText(mGame.getTeamName(TeamType.GUEST));
                 }
-                // clear the flag to avoid loops
                 intent.removeExtra("from_edit_current");
             }
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) { }
     }
 
-}
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         reloadCurrentGameIfNeeded(intent);
     }
-    
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reloadCurrentGameIfNeeded(getIntent());
+    }
 }
